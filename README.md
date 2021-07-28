@@ -1,5 +1,9 @@
 # TriPAs - Make it Simple
 
+## Demo
+
+![demo](screen.JPG)
+
 ## To Run the Application Execute following command
 
 - Open this example in VS Code 1.47+
