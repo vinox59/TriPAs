@@ -7,4 +7,4 @@
 - `npm run watch` or `npm run compile`
 - `F5` to start debugging
 
-Run the `Cat Coding: Start cat coding session` to create the webview.
+Run the `TriPAs: Start cat coding session` to create the webview.
