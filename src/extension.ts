@@ -209,11 +209,11 @@ class CatCodingPanel {
 					</div>
 					<div class="btn-container">
 						<button onclick="getAlert()">Style Collision</button>
-						<button onclick="getAlert()">Lunch TFS</button>
+						<button onclick="getAlert()">Launch TFS</button>
 						<button onclick="getAlert()">Remainder</button>
 					</div>
 				</div>
-				<h1 id="lines-of-code-counter">0</h1>
+				
 
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 				<script>
