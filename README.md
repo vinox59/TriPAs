@@ -2,7 +2,7 @@
 
 ## Demo
 
-![demo](screen.JPG)
+![screen](screen.JPG)
 
 ## To Run the Application Execute following command
 
