@@ -1,6 +1,6 @@
 {
 	"name": "cat-coding",
-	"description": "Cat Coding - A Webview API Sample",
+	"description": "TriPAs - Make it Simple",
 	"version": "0.0.1",
 	"publisher": "vscode-samples",
 	"private": true,
@@ -25,7 +25,7 @@
 		"commands": [
 			{
 				"command": "catCoding.start",
-				"title": "Start cat coding session",
+				"title": "Make it Simple",
 				"category": "TriPAs"
 			},
 			{
