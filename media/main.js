@@ -7,6 +7,7 @@
     const oldState = /** @type {{ count: number} | undefined} */ (vscode.getState());
 
     const counter = /** @type {HTMLElement} */ (document.getElementById('lines-of-code-counter'));
+    const style = document.getElementById('style');
     console.log('Initial state', oldState);
 
     let currentCount = (oldState && oldState.count) || 0;
@@ -39,9 +40,22 @@
         }
     });
 
-    function getAlert() {
-        vscode.postMessage({command: "alert", text: "BUTTON PRESSED!"});
+    style?.addEventListener('click', fnStyleCollision);
+
+    function fnStyleCollision() {
+        console.log("style collision executed");
+        const spawnobj = require('child_process').spawn,
+        progToOpen =  spawnobj('C://Windows//notepad.exe');
     }
+
+    // const getTfs = /** @type {HTMLElement} */ (document.getElementById('getAlertTFS'));
+    // getTfs.addEventListener('click', function() {
+    //     console.log('landed');
+    //     const spawnobj = require('child_process').spawn, 
+    //     progToOpen =  spawnobj('C://Windows//system32//notepad.exe');
+    //     //window.open("C://Windows//system32//notepad.exe");
+    //     vscode.postMessage({command: "alert", text: "BUTTON PRESSED!"});
+    // })
     
 }());
 

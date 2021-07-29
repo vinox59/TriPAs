@@ -2,8 +2,8 @@ import * as vscode from 'vscode';
 
 const cats = {
 	'Coding Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
-	'Compiling Cat': 'https://media.giphy.com/media/mlvseq9yvZhba/giphy.gif',
-	'Testing Cat': 'https://media.giphy.com/media/3oriO0OEd9QIDdllqo/giphy.gif'
+	'Compiling Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
+	'Testing Cat': 'https://i.postimg.cc/fbm33cJG/logo.png'
 };
 
 export function activate(context: vscode.ExtensionContext) {
@@ -114,6 +114,9 @@ class CatCodingPanel {
 					case 'alert':
 						vscode.window.showErrorMessage(message.text);
 						return;
+					case 'style':
+						vscode.window.showErrorMessage(message.text);
+						return;
 				}
 			},
 			null,
@@ -208,17 +211,14 @@ class CatCodingPanel {
 						<img class="logo" src="${catGifPath}" width="300" />
 					</div>
 					<div class="btn-container">
-						<button onclick="getAlert()">Style Collision</button>
+						<button type="button" id="style">Style Collision</button>
 						<button onclick="getAlert()">Launch TFS</button>
 						<button onclick="getAlert()">Remainder</button>
 					</div>
 				</div>
 				
-
+				<h1 id="lines-of-code-counter">0</h1>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
-				<script>
-				
-				</script>
 			</body>
 			</html>`;
 	}
