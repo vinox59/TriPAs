@@ -8,7 +8,8 @@
 
     const counter = /** @type {HTMLElement} */ (document.getElementById('lines-of-code-counter'));
     const style = document.getElementById('style');
-    console.log('Initial state', oldState);
+    const tfs = document.getElementById('tfs');
+    const lint = document.getElementById('lint');
 
     let currentCount = (oldState && oldState.count) || 0;
     counter.textContent = `${currentCount}`;
@@ -43,19 +44,27 @@
     style?.addEventListener('click', fnStyleCollision);
 
     function fnStyleCollision() {
-        console.log("style collision executed");
-        const spawnobj = require('child_process').spawn,
-        progToOpen =  spawnobj('C://Windows//notepad.exe');
+        vscode.postMessage({
+            command: 'style', text: "Style Collision is Initiated"
+        });
+       
     }
 
-    // const getTfs = /** @type {HTMLElement} */ (document.getElementById('getAlertTFS'));
-    // getTfs.addEventListener('click', function() {
-    //     console.log('landed');
-    //     const spawnobj = require('child_process').spawn, 
-    //     progToOpen =  spawnobj('C://Windows//system32//notepad.exe');
-    //     //window.open("C://Windows//system32//notepad.exe");
-    //     vscode.postMessage({command: "alert", text: "BUTTON PRESSED!"});
-    // })
+    tfs?.addEventListener('click', fnlaunchTFS);
+
+    function fnlaunchTFS() {
+        vscode.postMessage({
+            command: 'tfs', text: 'TFS is going to launch'
+        })
+    }
+
+    lint?.addEventListener('click', fnLint);
+
+    function fnLint() {
+        vscode.postMessage({
+            command: 'lint', text: 'Lint Initated'
+        })
+    }
     
 }());
 

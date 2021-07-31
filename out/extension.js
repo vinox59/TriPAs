@@ -7,7 +7,9 @@ const cats = {
     'Compiling Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
     'Testing Cat': 'https://i.postimg.cc/fbm33cJG/logo.png'
 };
+let myStatusBarItem;
 function activate(context) {
+    let NEXT_TERM_ID = 1;
     context.subscriptions.push(vscode.commands.registerCommand('catCoding.start', () => {
         CatCodingPanel.createOrShow(context.extensionUri);
     }));
@@ -16,6 +18,49 @@ function activate(context) {
             CatCodingPanel.currentPanel.doRefactor();
         }
     }));
+    context.subscriptions.push(vscode.commands.registerCommand('styleCollison.execute', () => {
+        const terminal = vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
+        terminal.sendText("cd /");
+        terminal.sendText(`mkdir styleCollision/${NEXT_TERM_ID}`);
+        terminal.sendText(`cd ./styleCollision/${NEXT_TERM_ID}`);
+        terminal.sendText(`type > ${NEXT_TERM_ID}.txt`);
+        if (ensureTerminalExists()) {
+            selectTerminal().then(terminal => {
+                if (terminal) {
+                    terminal.show(true);
+                }
+            });
+        }
+    }));
+    context.subscriptions.push(vscode.commands.registerCommand('launchTFS.execute', () => {
+        const terminal = vscode.window.createTerminal('LaunchTFS');
+        terminal.sendText("cd /");
+        terminal.sendText("cd '.\\Windows\\System32'");
+        terminal.sendText("notepad.exe");
+        if (ensureTerminalExists()) {
+            selectTerminal().then(terminal => {
+                if (terminal) {
+                    terminal.show(true);
+                }
+            });
+        }
+    }));
+    const myCommandId = "tripasLint.execute";
+    context.subscriptions.push(vscode.commands.registerCommand(myCommandId, () => {
+        vscode.window.showInformationMessage('Lint Was started Executing');
+        const terminal = vscode.window.createTerminal('TriPAs Lint');
+        terminal.sendText('npm run lint');
+        if (ensureTerminalExists()) {
+            selectTerminal().then(terminal => {
+                if (terminal) {
+                    terminal.show(true);
+                }
+            });
+        }
+    }));
+    myStatusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+    myStatusBarItem.command = myCommandId;
+    context.subscriptions.push(myStatusBarItem);
     if (vscode.window.registerWebviewPanelSerializer) {
         // Make sure we register a serializer in activation event
         vscode.window.registerWebviewPanelSerializer(CatCodingPanel.viewType, {
@@ -60,11 +105,18 @@ class CatCodingPanel {
         this._panel.webview.onDidReceiveMessage(message => {
             switch (message.command) {
                 case 'alert':
-                    vscode.window.showErrorMessage(message.text);
+                    // vscode.window.showErrorMessage(message.text);
                     return;
                 case 'style':
-                    vscode.window.showErrorMessage(message.text);
-                    return;
+                    vscode.window.showInformationMessage(message.text);
+                    vscode.commands.executeCommand("styleCollison.execute");
+                    break;
+                case 'tfs':
+                    vscode.window.showInformationMessage(message.text);
+                    vscode.commands.executeCommand("launchTFS.execute");
+                    break;
+                case 'lint':
+                    break;
             }
         }, null, this._disposables);
     }
@@ -158,8 +210,8 @@ class CatCodingPanel {
 					</div>
 					<div class="btn-container">
 						<button type="button" id="style">Style Collision</button>
-						<button onclick="getAlert()">Launch TFS</button>
-						<button onclick="getAlert()">Remainder</button>
+						<button type="button" id="tfs">Launch TFS</button>
+						<button type="button" id="lint">Run Lint</button>
 					</div>
 				</div>
 				
@@ -177,5 +229,24 @@ function getNonce() {
         text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
+}
+function selectTerminal() {
+    const terminals = vscode.window.terminals;
+    const items = terminals.map(t => {
+        return {
+            label: `name: ${t.name}`,
+            terminal: t
+        };
+    });
+    return vscode.window.showQuickPick(items).then(item => {
+        return item ? item.terminal : undefined;
+    });
+}
+function ensureTerminalExists() {
+    if (vscode.window.terminals.length === 0) {
+        vscode.window.showErrorMessage('No active terminals');
+        return false;
+    }
+    return true;
 }
 //# sourceMappingURL=extension.js.map
