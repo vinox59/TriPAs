@@ -2,6 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = void 0;
 const vscode = require("vscode");
+const TripasTimerManager_1 = require("./TripasTimerManager");
 const cats = {
     'Coding Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
     'Compiling Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
@@ -72,6 +73,12 @@ function activate(context) {
             }
         });
     }
+    //Timer-----------------------------------------------------------------------
+    const config = vscode.workspace.getConfiguration("cat-coding");
+    const tripasManager = new TripasTimerManager_1.default(config.workTime, config.pauseTime);
+    tripasManager.start();
+    context.subscriptions.push(tripasManager);
+    //-----------------------------------------------------------------------------
 }
 exports.activate = activate;
 function getWebviewOptions(extensionUri) {

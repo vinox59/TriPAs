@@ -46,3 +46,7 @@ button {
 .btn-container button {
 	margin-right: 5px !important;
 }
+
+#lines-of-code-counter {
+	visibility: hidden;
+}
