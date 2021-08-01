@@ -10,7 +10,7 @@
     const style = document.getElementById('style');
     const tfs = document.getElementById('tfs');
     const lint = document.getElementById('lint');
-
+    let azdoContent = document.getElementById('azdoContent');
     let currentCount = (oldState && oldState.count) || 0;
     counter.textContent = `${currentCount}`;
 
@@ -37,7 +37,10 @@
             case 'refactor':
                 currentCount = Math.ceil(currentCount * 0.5);
                 counter.textContent = `${currentCount}`;
-                break;
+            break;
+            case 'AZdoData':
+                azdoContent.innerHTML =  message.text;
+            break;  
         }
     });
 

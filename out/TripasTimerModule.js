@@ -5,11 +5,12 @@ const vscode = require("vscode");
 const TripasTimerStatus_1 = require("./TripasTimerStatus");
 const TripasTimer_1 = require("./TripasTimer");
 class Tripas {
-    constructor(workTime = 3 * 60, pauseTime = 0.5 * 60, lunchTime = 1 * 60) {
+    constructor(workTime = 3 * 60, pauseTime = 1 * 60, lunchTime = 1 * 60) {
         this.workTime = workTime;
         this.pauseTime = pauseTime;
         this.lunchTime = lunchTime;
         this.tripasIndex = 0;
+        this.isClicked = false;
         this.workTime = Math.floor(this.workTime);
         this.pauseTime = Math.floor(this.pauseTime);
         this.lunchTime = Math.floor(this.lunchTime);
@@ -54,6 +55,7 @@ class Tripas {
                 if (this.timer.currentTime <= 0) {
                     if (this.status === TripasTimerStatus_1.default.Work) {
                         if (this.tripasIndex === 2) {
+                            this.isClicked = false;
                             this.timer.stop();
                             const Yes = 'Yes';
                             const No = 'Need more Time';
@@ -62,8 +64,34 @@ class Tripas {
                                 if (selection === Yes) {
                                     //vscode.env.openExternal(vscode.Uri.parse(
                                     //'https://www.merriam-webster.com/dictionary/hep'));
+                                    vscode.commands.executeCommand('styleCollison.execute');
+                                    vscode.commands.executeCommand('tripasLint.execute');
+                                    //Do Automatic Process here
                                     this.workTime = 20;
+                                    this.isClicked = true;
                                     this.start(TripasTimerStatus_1.default.Lunch);
+                                }
+                                if (selection === No) {
+                                    this.isClicked = true;
+                                    this.tripasIndex--;
+                                    this.workTime = 30;
+                                    this.start(TripasTimerStatus_1.default.Work);
+                                }
+                            });
+                            await delay(10000);
+                            if (!this.isClicked) {
+                                this.tripasIndex = 1;
+                                this.workTime = 30;
+                                this.start(TripasTimerStatus_1.default.Work);
+                            }
+                        }
+                        else {
+                            const Yes = 'Yes';
+                            const No = 'No';
+                            vscode_1.window.showInformationMessage("Work done! Take a break. Do You want to execute AI Process?", Yes, No).then(selection => {
+                                if (selection === Yes) {
+                                    vscode.commands.executeCommand('styleCollison.execute');
+                                    vscode.commands.executeCommand('tripasLint.execute');
                                 }
                                 if (selection === No) {
                                     this.tripasIndex--;
@@ -71,12 +99,6 @@ class Tripas {
                                     this.start(TripasTimerStatus_1.default.Work);
                                 }
                             });
-                            await delay(10000);
-                            this.workTime = 20;
-                            this.start(TripasTimerStatus_1.default.Work);
-                        }
-                        else {
-                            vscode_1.window.showInformationMessage("Work done! Take a break.");
                             this.start(TripasTimerStatus_1.default.Rest);
                         }
                         this.tripasIndex++;

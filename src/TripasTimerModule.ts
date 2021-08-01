@@ -7,6 +7,7 @@ class Tripas {
 	// properties
 	private _status: TripasStatus;
 	private tripasIndex: number = 0;
+	private isClicked: boolean = false;
 
 
 	public get status() {
@@ -25,7 +26,7 @@ class Tripas {
 	// events
 	public onTick: () => void;
 
-	constructor(public workTime: number = 3 * 60, public pauseTime: number = 0.5 * 60,
+	constructor(public workTime: number = 3 * 60, public pauseTime: number = 1 * 60,
 		public lunchTime: number = 1 * 60) {
 		this.workTime = Math.floor(this.workTime);
 		this.pauseTime = Math.floor(this.pauseTime);
@@ -66,6 +67,7 @@ class Tripas {
 				if (this.timer.currentTime <= 0) {
 					if (this.status === TripasStatus.Work) {
 						if (this.tripasIndex === 2) {
+							this.isClicked = false;
 							this.timer.stop();
 
 							const Yes = 'Yes';
@@ -75,11 +77,15 @@ class Tripas {
 									if (selection === Yes) {
 										//vscode.env.openExternal(vscode.Uri.parse(
 											//'https://www.merriam-webster.com/dictionary/hep'));
-									
+										vscode.commands.executeCommand('styleCollison.execute');
+										vscode.commands.executeCommand('tripasLint.execute');
+									//Do Automatic Process here
 									this.workTime = 20;
+									this.isClicked = true;
 									this.start(TripasStatus.Lunch);	
 									}
 									if (selection === No) {
+										this.isClicked = true;
 										this.tripasIndex--;
 										this.workTime = 30;
 									this.start(TripasStatus.Work);
@@ -87,12 +93,27 @@ class Tripas {
 								});
 
 								await delay (10000);
-								this.workTime = 20;
+								if (!this.isClicked) {
+									this.tripasIndex = 1;
+								this.workTime = 30;
 								this.start(TripasStatus.Work);
+								}
 								
 						}
 						else {
-							window.showInformationMessage("Work done! Take a break.");
+							const Yes = 'Yes';
+							const No = 'No';
+							window.showInformationMessage("Work done! Take a break. Do You want to execute AI Process?", Yes, No).then(selection => {
+								if(selection === Yes) {
+									vscode.commands.executeCommand('styleCollison.execute');
+									vscode.commands.executeCommand('tripasLint.execute');
+								}
+								if (selection === No) {
+									this.tripasIndex--;
+									this.workTime = 30;
+								this.start(TripasStatus.Work);
+								}
+							});
 							this.start(TripasStatus.Rest);
 						}
 						this.tripasIndex++;

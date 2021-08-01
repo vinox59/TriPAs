@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.activate = void 0;
 const vscode = require("vscode");
 const TripasTimerManager_1 = require("./TripasTimerManager");
+const axios = require("axios");
 const cats = {
     'Coding Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
     'Compiling Cat': 'https://i.postimg.cc/fbm33cJG/logo.png',
@@ -20,7 +21,7 @@ function activate(context) {
         }
     }));
     context.subscriptions.push(vscode.commands.registerCommand('styleCollison.execute', () => {
-        const terminal = vscode.window.createTerminal(`Ext Terminal #${NEXT_TERM_ID++}`);
+        const terminal = vscode.window.createTerminal(`style collision #${NEXT_TERM_ID++}`);
         terminal.sendText("cd /");
         terminal.sendText(`mkdir styleCollision/${NEXT_TERM_ID}`);
         terminal.sendText(`cd ./styleCollision/${NEXT_TERM_ID}`);
@@ -126,6 +127,33 @@ class CatCodingPanel {
                     break;
             }
         }, null, this._disposables);
+        //Axios Service call
+        let getapidata;
+        const loginhtml = "index";
+        const token = 'i37vpq7gtuhiolhb74omkqrr6pglxvepiezyvcj22ys24l4bnfna';
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': `Basic  ${token} `
+        };
+        axios.get('https://dev.azure.com/TrizettoT3/Facets/_apis/wit/wiql/3dbc60d2-97a1-483b-99c6-0eed0460646e?api-version=4.1', headers)
+            .then(function (response) {
+            // handle success
+            getapidata = response.data;
+            panel.webview.postMessage({ command: 'AZdoData', text: getapidata });
+            const terminal = vscode.window.createTerminal('LaunchChrome');
+            terminal.sendText("cd /");
+            terminal.sendText(`mkdir Login/${loginhtml}`);
+            terminal.sendText(`cd ./Login/${loginhtml}`);
+            terminal.sendText(`type > ${loginhtml}.html`);
+            return response.data;
+        })
+            .catch(function (error) {
+            // handle error
+            console.log(error, 'err');
+        })
+            .then(function () {
+            // always executed
+        });
     }
     static createOrShow(extensionUri) {
         const column = vscode.window.activeTextEditor
@@ -221,7 +249,7 @@ class CatCodingPanel {
 						<button type="button" id="lint">Run Lint</button>
 					</div>
 				</div>
-				
+				<div id="azdoContent"></div>
 				<h1 id="lines-of-code-counter">0</h1>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>

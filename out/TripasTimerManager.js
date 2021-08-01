@@ -4,7 +4,7 @@ const vscode_1 = require("vscode");
 const TripasTimerModule_1 = require("./TripasTimerModule");
 const TripasTimerStatus_1 = require("./TripasTimerStatus");
 class TripasManager {
-    constructor(workTime = 2, pauseTime = 0.2, lunchTime = 0.5) {
+    constructor(workTime = 2, pauseTime = 0.5, lunchTime = 1) {
         this.workTime = workTime;
         this.pauseTime = pauseTime;
         this.lunchTime = lunchTime;
