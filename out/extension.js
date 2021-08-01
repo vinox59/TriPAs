@@ -123,19 +123,26 @@ class CatCodingPanel {
                     vscode.window.showInformationMessage(message.text);
                     vscode.commands.executeCommand("launchTFS.execute");
                     break;
-                case 'lint':
+                case 'get':
+                    axios.get(message.text, { auth: {
+                            username: '',
+                            password: 'i37vpq7gtuhiolhb74omkqrr6pglxvepiezyvcj22ys24l4bnfna'
+                        } }).then(function (response) {
+                        const responseData = response.data;
+                        panel.webview.postMessage({ command: 'getData', text: responseData });
+                    });
                     break;
             }
         }, null, this._disposables);
         //Axios Service call
         let getapidata;
         const loginhtml = "index";
+        let user;
         const token = 'i37vpq7gtuhiolhb74omkqrr6pglxvepiezyvcj22ys24l4bnfna';
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': `Basic  ${token} `
-        };
-        axios.get('https://dev.azure.com/TrizettoT3/Facets/_apis/wit/wiql/3dbc60d2-97a1-483b-99c6-0eed0460646e?api-version=4.1', headers)
+        axios.get('https://dev.azure.com/TrizettoT3/Facets/_apis/wit/wiql/3dbc60d2-97a1-483b-99c6-0eed0460646e?api-version=4.1', { auth: {
+                username: user,
+                password: token
+            } })
             .then(function (response) {
             // handle success
             getapidata = response.data;
@@ -170,6 +177,8 @@ class CatCodingPanel {
     }
     static revive(panel, extensionUri) {
         CatCodingPanel.currentPanel = new CatCodingPanel(panel, extensionUri);
+    }
+    axiosCall(url, panel) {
     }
     doRefactor() {
         // Send a message to the webview webview.
@@ -244,12 +253,43 @@ class CatCodingPanel {
 						<img class="logo" src="${catGifPath}" width="300" />
 					</div>
 					<div class="btn-container">
-						<button type="button" id="style">Style Collision</button>
-						<button type="button" id="tfs">Launch TFS</button>
+						<button type="button" id="Dashboard">Dashboard</button>
+						<button type="button" id="style">Configure Command</button>
 						<button type="button" id="lint">Run Lint</button>
+						<button type="button" id="tfs">Launch application</button>
+						<button type="button" id="task">AzDo Information</button>
 					</div>
 				</div>
-				<div id="azdoContent"></div>
+				<br />
+				<div id="azdoContent">
+					<h2>AzDo Information</h2><br />
+					<table border="1" width="100%">
+						<thead>
+							<tr>
+								<th>Title</th>
+								<th>Date</th>
+								<th>State</th>
+								<th>Original Estimate</th>
+								<th>Completed</th>
+								<th>Remaining</th>
+							</tr>
+						</thead>
+						<tbody id="tbodyContent">
+						<tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/464696">DNAR - C++ Analysis, Maint movement, Rest Service</a></td><td>2021-07-28T06:31:44.01Z</td><td>Closed</td><td>36</td><td>36</td><td>36</td></tr><tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/464668">Premium Gender - Coding, C++ Analysis, Maint Movement, Rest Service Development</a></td><td>2021-07-28T06:31:41.39Z</td><td>Closed</td><td>24</td><td>24</td><td>24</td></tr><tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/464465"> ReST development - Coding and Unit testing</a></td><td>2021-07-28T11:11:57.797Z</td><td>In Progress</td><td>30</td><td>6</td><td>30</td></tr>
+						</tbody>
+					</table>
+				</div>
+				<br />
+				<div id="buildInfo">
+					<h2>Build Information</h2><br />
+					<p>Last Successful build: 7/1/2021<br />
+					Changesets are included<br />
+					Changeset: <i><a>911725</a></i><br />
+					User: <i><a>Frederick, Jerry</a></i><br />
+					Changeset: <i><a>911723</a></i><br />
+					User: Panson, Gregg <br />
+					<a>Click Here</a> for Detailed Report</p>
+				</div>
 				<h1 id="lines-of-code-counter">0</h1>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>

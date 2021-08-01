@@ -1,3 +1,4 @@
+// @ts-nocheck
 // This script will be run within the webview itself
 // It cannot access the main VS Code APIs directly.
 
@@ -10,15 +11,22 @@
     const style = document.getElementById('style');
     const tfs = document.getElementById('tfs');
     const lint = document.getElementById('lint');
-    let azdoContent = document.getElementById('azdoContent');
+    let azdoContent = /** @type {HTMLElement} */ document.getElementById('azdoContent');
+    const task = document.getElementById('task');
     let currentCount = (oldState && oldState.count) || 0;
-    counter.textContent = `${currentCount}`;
+    let currentData = '';
+    let azdoResponseData;
+    let azdoIndividualData = [];
+    const tbodyContent = document.getElementById('tbodyContent');
 
+    let user = '';
+    let token = 'i37vpq7gtuhiolhb74omkqrr6pglxvepiezyvcj22ys24l4bnfna';
+    counter.textContent = `${currentCount}`;
     setInterval(() => {
         counter.textContent = `${currentCount++} `;
 
         // Update state
-        vscode.setState({ count: currentCount });
+        vscode.setState({ count: currentCount, data: currentData });
 
         // Alert the extension when the cat introduces a bug
         if (Math.random() < Math.min(0.001 * currentCount, 0.05)) {
@@ -39,8 +47,27 @@
                 counter.textContent = `${currentCount}`;
             break;
             case 'AZdoData':
-                azdoContent.innerHTML =  message.text;
+                console.log("Response Data::",message.text.workItems);
+                azdoResponseData = message.text.workItems;
+                if(azdoResponseData.length > 0) {
+                    for(let i=0; i<azdoResponseData.length; i++) {
+                        vscode.postMessage({'command':'get','text':azdoResponseData[i].url})
+                    }
+                }
+                //azdoContent.innerHTML =  message.text;
             break;  
+            case 'getData':
+                console.log("Ind Data::",message.text);
+                azdoIndividualData.push(message.text);
+                if(azdoResponseData.length === azdoIndividualData.length) {
+                    let tr;
+                    for(let j=0; j< azdoIndividualData.length; j++) {
+                        tr += `<tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/${azdoIndividualData[j].id}">${azdoIndividualData[j].fields['System.Title']}</a></td><td>${azdoIndividualData[j].fields['System.ChangedDate']}</td><td>${azdoIndividualData[j].fields['System.State']}</td><td>${azdoIndividualData[j].fields['Microsoft.VSTS.Scheduling.OriginalEstimate']}</td><td>${azdoIndividualData[j].fields['Microsoft.VSTS.Scheduling.CompletedWork']}</td><td>${azdoIndividualData[j].fields['Microsoft.VSTS.Scheduling.OriginalEstimate']}</td></tr>`;
+                    }
+                    
+                    console.log(tr);
+                }
+            break;
         }
     });
 

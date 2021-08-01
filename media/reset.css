@@ -50,3 +50,7 @@ button {
 #lines-of-code-counter {
 	visibility: hidden;
 }
+
+h2 {
+	text-decoration: underline;
+}
