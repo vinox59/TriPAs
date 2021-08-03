@@ -47,9 +47,9 @@ button {
 	margin-right: 5px !important;
 }
 
-#lines-of-code-counter {
+/* #lines-of-code-counter {
 	visibility: hidden;
-}
+} */
 
 h2 {
 	text-decoration: underline;

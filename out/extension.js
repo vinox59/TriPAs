@@ -274,8 +274,8 @@ class CatCodingPanel {
 								<th>Remaining</th>
 							</tr>
 						</thead>
-						<tbody id="tbodyContent">
-						<tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/464696">DNAR - C++ Analysis, Maint movement, Rest Service</a></td><td>2021-07-28T06:31:44.01Z</td><td>Closed</td><td>36</td><td>36</td><td>36</td></tr><tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/464668">Premium Gender - Coding, C++ Analysis, Maint Movement, Rest Service Development</a></td><td>2021-07-28T06:31:41.39Z</td><td>Closed</td><td>24</td><td>24</td><td>24</td></tr><tr><td><a href="https://dev.azure.com/TriZettoT3/Facets/_workitems/edit/464465"> ReST development - Coding and Unit testing</a></td><td>2021-07-28T11:11:57.797Z</td><td>In Progress</td><td>30</td><td>6</td><td>30</td></tr>
+						<tbody id="lines-of-code-counter">
+							<tr><td colspan="6">No Record to Display</td></tr>
 						</tbody>
 					</table>
 				</div>
@@ -290,7 +290,6 @@ class CatCodingPanel {
 					User: Panson, Gregg <br />
 					<a>Click Here</a> for Detailed Report</p>
 				</div>
-				<h1 id="lines-of-code-counter">0</h1>
 				<script nonce="${nonce}" src="${scriptUri}"></script>
 			</body>
 			</html>`;
